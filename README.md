@@ -46,7 +46,12 @@ $ node models/migrations.js
 
 ## Start
 
-To run the server :
+To run the server in debug mode:
 ```shell
-$ npm start
+$ DEBUG=chessapp:* npm start
+```
+
+To run in production mode :
+```shell
+$ NODE_ENV=production npm start
 ```
