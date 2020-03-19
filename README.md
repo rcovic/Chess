@@ -3,7 +3,7 @@
 **This is a chess web app game built on express js framework_**
 
 To run this web applcation with success you have to create a mysql database instance.
-```json
+```javascript
 {
     host: 'localhost',
     user: 'chess',
@@ -28,7 +28,7 @@ $ mysqldump -u chess -p chess_db > database/dump.sql
 
 To import the db :
 ```shell
-$ mysqldump -u chess -p chess_db < database/dump.sql
+$ mysql -u chess -p chess_db < database/dump.sql
 ```
 
 ## Models migrations
