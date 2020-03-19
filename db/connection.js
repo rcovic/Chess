@@ -6,7 +6,7 @@ const sequelize = new Sequelize(
     'chess', // password
     {
         host: 'localhost',
-        dialect: 'mysql'
+        dialect: 'mysql',
     }
 );
 

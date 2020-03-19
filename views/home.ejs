@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>Home page</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <h1>Home page</h1>
+    <p>Welcome <%= user %></p>
+    <a href="/auth" onclick="logout();">Logout</a>
+    <script src="/javascripts/logout.js"></script> 
   </body>
 </html>

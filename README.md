@@ -14,6 +14,12 @@ To run this web applcation with success you have to create a mysql database inst
 
 ## Setup
 
+First on all install every module :
+```shell
+$ cd Chess
+$ npm install
+```
+
 Creat the db, the user and grant privileges:
 ```sql
 CREATE DATABASE chess_db;
@@ -36,4 +42,11 @@ $ mysql -u chess -p chess_db < database/dump.sql
 If you want to modify a model then you should apply changes to db :
 ```shell
 $ node models/migrations.js
+```
+
+## Start
+
+To run the server :
+```shell
+$ npm start
 ```

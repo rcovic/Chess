@@ -5,6 +5,7 @@ const gameController = require('../controllers/gameController');
 
 
 router.use(tokenHandler.verifyToken);
+router.use(tokenHandler.decodeToken);
 
 router.get('/', gameController.index);
 
