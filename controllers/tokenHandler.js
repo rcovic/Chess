@@ -9,6 +9,16 @@ module.exports.decodeToken = (req, res, next) => {
 };
 
 
+module.exports.createToken = (user) => {
+    return jwt.sign({
+        user: user
+    }, 
+    secretKey, {
+        // expiresIn: '2h'
+    }); 
+};
+
+
 module.exports.verifyToken = (req, res, next) => {
     const token = req.cookies.token;
 
@@ -22,11 +32,14 @@ module.exports.verifyToken = (req, res, next) => {
 };
 
 
-module.exports.createToken = (user) => {
-    return jwt.sign({
-        user: user
-    }, 
-    secretKey, {
-        // expiresIn: '2h'
-    }); 
+module.exports.hasToken = (req, res, next) => {
+    const token = req.cookies.token;
+
+    try {
+        jwt.verify(token, secretKey);
+        res.redirect('/game');
+    }
+    catch (err) {
+        next();
+    }
 };
