@@ -1,11 +1,12 @@
-const {Sequelize, sequelize} = require('../db/connection');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db/connection');
 
 const User = require('./user');
 
 
 const Game = sequelize.define('games', {
-    duration: Sequelize.INTEGER,
-    state: Sequelize.JSON
+    duration: DataTypes.INTEGER,
+    state: DataTypes.JSON
 });
 
 User.hasMany(Game, {
