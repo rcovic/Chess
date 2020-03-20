@@ -1,5 +1,6 @@
 const {Sequelize, sequelize} = require('./connection');
 const User = require('../models/user');
+const Game = require('../models/game');
 const Op = Sequelize.Op;
 
 

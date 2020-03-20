@@ -24,17 +24,17 @@ DROP TABLE IF EXISTS `games`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `games` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `white` varchar(255) DEFAULT NULL,
-  `black` varchar(255) DEFAULT NULL,
   `duration` int(11) DEFAULT NULL,
   `state` json DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
+  `whitePlayer` varchar(255) DEFAULT NULL,
+  `blackPlayer` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `white` (`white`),
-  KEY `black` (`black`),
-  CONSTRAINT `games_ibfk_1` FOREIGN KEY (`white`) REFERENCES `users` (`username`),
-  CONSTRAINT `games_ibfk_2` FOREIGN KEY (`black`) REFERENCES `users` (`username`)
+  KEY `whitePlayer` (`whitePlayer`),
+  KEY `blackPlayer` (`blackPlayer`),
+  CONSTRAINT `games_ibfk_1` FOREIGN KEY (`whitePlayer`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `games_ibfk_2` FOREIGN KEY (`blackPlayer`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -70,7 +70,6 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('a','a','d@gmail.com','2020-03-19 20:42:32','2020-03-19 20:42:32'),('aa','aa','d@gmail.com','2020-03-19 21:15:08','2020-03-19 21:15:08'),('s','s','d@gmail.com','2020-03-19 20:05:54','2020-03-19 20:05:54'),('test','test','davi@gmail.com','2020-03-19 22:46:01','2020-03-19 22:46:01');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -83,4 +82,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-19 23:50:02
+-- Dump completed on 2020-03-20 13:35:54
