@@ -1,7 +1,6 @@
-const {Sequelize, sequelize} = require('./connection');
+'use strict';
+
 const User = require('../models/user');
-const Game = require('../models/game');
-const Op = Sequelize.Op;
 
 
 module.exports.validCred = async (user, pass) => {
@@ -28,15 +27,14 @@ module.exports.existUser = async function existUser(user) {
 
 
 module.exports.createUser = async (user, pass, email) => {
-    try {
-        await User.create({
-            username: user,
-            password: pass,
-            email: email
-        });
-    }
-    catch (err) {
-        return false;
-    }
-    return true;
+    var isSuccess = true;
+    await User.create({
+        username: user,
+        password: pass,
+        email: email
+    })
+    .catch((err) => {
+        isSuccess = false;
+    });
+    return isSuccess;
 }

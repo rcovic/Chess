@@ -1,3 +1,5 @@
+'use strict';
+
 const tokenHandler = require('./tokenHandler');
 const dbop = require('../db/operations');
 
@@ -13,7 +15,7 @@ module.exports.submitLogin = async (req, res) => {
     const isValid = await dbop.validCred(username, password);
 
     if (isValid) {
-        token = tokenHandler.createToken(req.body.username);
+        let token = tokenHandler.createToken(req.body.username);
         res.cookie('token', token);
         res.redirect('/game');
     }
