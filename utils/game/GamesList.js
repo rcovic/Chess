@@ -1,6 +1,5 @@
 'use strict';
 
-const { v4:uuidv4 } = require('uuid');
 const Game = require('./Game');
 
 class GamesList {
@@ -8,27 +7,26 @@ class GamesList {
         this.games = new Map();
     }
 
-    addGame(user_1, user_2) {
-        
-        uuid_key = uuidv4(); 
-
+    createGame(game_uuid, token) {
         this.games.set(
-            uuid_key,
+            game_uuid,
             new Game(
-                user_1,
-                user_2
+                game_uuid,
+                token.username
             )
         );
-
-        // ritorna la chiave?
-        // crea un instanza game nel db con foreign key ai giocatori?
-        // aggiunge la chiave al token?
-        // come notifico l'utente?
-        // l'utente chiede periodicamente se la partita è trovata?
     }
 
-    deleteGame(uuid_key) {
-        this.games.delete(uuid_key);
+    deleteGame(game_uuid) {
+        this.games.delete(game_uuid);
+    }
+
+    addToGame(game_uuid, token) {
+        this.games.get(game_uuid).addPlayer(token.username);
+    }
+
+    isReady(game_uuid) {
+        return this.games.get(game_uuid).isReady();
     }
 }
 

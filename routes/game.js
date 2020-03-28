@@ -11,5 +11,7 @@ router.use(tokenHandler.decodeToken);
 
 router.get('/', gameController.index);
 
+router.get('/search', gameController.searchGame);
+
 
 module.exports = router;

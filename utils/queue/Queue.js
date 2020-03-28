@@ -1,5 +1,7 @@
 'use strict';
 
+const { v4:uuidv4 } = require('uuid');
+
 const Ticket = require('./Ticket');
 const gamesList = require('../game/GamesList');
 
@@ -9,33 +11,43 @@ class Queue {
         this.queue = [];
     }
 
-    
-    _addTicket(token) {
+    _addTicket(token, game_uuid) {
         this.queue.push( 
             new Ticket(
                 token.username,
-                token.elo
+                token.elo,
+                game_uuid
             )    
         );
     }
 
-    _removeTicket(index) {
+    removeTicket(index) {
         this.queue.splice(index, 1);
     }
 
-    searchGame(token) {
+    hasTicket(username) {
+        return this.queue.findIndex((el) => {
+            return el.username == username;
+        });
+    }
+
+    searchTicket(token) {
         
         var index = this.queue.findIndex((el) => {
             return el.canPlay(token);
         });
 
-        if (index != undefined) {
-            let username = queue[index].username;
-            this._removeTicket(index);
-            gamesList.addGame(token.username, username)
+        if (index != undefined && index != -1) {
+            let game_uuid = this.queue[index].game_uuid;
+            this.removeTicket(index);
+            gamesList.addToGame(game_uuid, token);
+            return game_uuid;
         }
         else {
-            this._addTicket(token);
+            let game_uuid = uuidv4();
+            this._addTicket(token, game_uuid);
+            gamesList.createGame(game_uuid, token);
+            return game_uuid;
         }
     }
 }

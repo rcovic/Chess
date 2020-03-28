@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Home page</title>
+    <title>Game page</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1>Home page</h1>
-    <p>Welcome <%= username %></p>
-    <a href="/game/search">Search a game</a><br>
+    <h1>Game page</h1>
+    <p>Found game <%= game_uuid %></p>
     <a href="/auth" onclick="logout();">Logout</a>
     <script src="/javascripts/logout.js"></script> 
   </body>

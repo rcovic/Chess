@@ -1,18 +1,29 @@
 'use strict';
 
+// un game è identificato da un uuid
+
 class Game {
-    _assignPlayers(user_1, user_2) {
-        if (Math.random() >= 0.5) {
-            this.white = user_1;
-            this.black = user_2;
-        } else {
-            this.white = user_2;
-            this.black = user_1;
-        }
+    constructor(game_uuid, username) {
+        this.game_uuid = game_uuid;
+        this._assignColor(username);
     }
 
-    constructor(user_1, user_2) {
-        _assignPlayers(user_1, user_2);
+    _assignColor(username) {
+        if (Math.random() >= 0.5)
+            this.white = username;
+        else
+            this.black = username;
+    }
+
+    addPlayer(username) {
+        if (this.white == undefined)
+            this.white = username;
+        else
+            this.black = username;
+    }
+
+    isReady() {
+        return this.white != undefined && this.black != undefined;
     }
 }
 
