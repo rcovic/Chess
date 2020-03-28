@@ -13,7 +13,8 @@ module.exports.decodeToken = (req, res, next) => {
 
 module.exports.createToken = (user) => {
     return jwt.sign({
-        user: user
+        username: user.username,
+        elo: user.elo
     }, 
     secretKey, {
         // expiresIn: '2h'

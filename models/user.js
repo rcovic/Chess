@@ -1,7 +1,7 @@
 'use strict';
 
 const { DataTypes } = require('sequelize');
-const sequelize = require('../db/connection');
+const sequelize = require('../utils/db/connection');
 
 
 module.exports = sequelize.define('users', {
@@ -10,5 +10,9 @@ module.exports = sequelize.define('users', {
         primaryKey: true
     },
     password: DataTypes.STRING,
-    email: DataTypes.STRING
+    email: DataTypes.STRING,
+    elo: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1000
+    }
 });
