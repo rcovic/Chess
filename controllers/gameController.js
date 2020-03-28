@@ -12,22 +12,28 @@ module.exports.index = function(req, res) {
     res.render('home', { username: res.locals.token.username });
 };
 
-// on matchmaking request you have to LONG polling on client.
-// server check if game is ready every second (?) and respond
-// when it's ready --> must be async
 
-// PROBLEM! if a user start a ticket request and leave the page?
+module.exports.searchGame = async (req, res) => {
+// 1 PROBLEM! must implement long polling on the client.
+// also the browser after a while will make the request again
+// if the ticket is not removed the palyer will be matched
+// with itself
+
+// 2 PROBLEM! if a user start a ticket request and leave the page?
 // you must remove the ticket
 // add to game route the removeticket middleware ?
+// THIS COULD SOLVE THE FIRST PROBLEM BUT IS NOT ELEGANT
 
-// this is an example of what it could be
-module.exports.searchGame = async (req, res) => {
     var game_uuid = queue.searchTicket(res.locals.token);
 
     while(!gamesList.isReady(game_uuid)) {
         await sleep(1000);
     }
 
-    // prova
-    res.render('game_test', { game_uuid: game_uuid});
+    res.json({game_uuid: game_uuid});
+};
+
+
+module.exports.match = (req, res) => {
+    res.render('search-game');
 };

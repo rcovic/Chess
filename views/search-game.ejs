@@ -4,10 +4,11 @@
     <title>Game page</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
-  <body>
+  <body onload="searchGame();">
     <h1>Game page</h1>
-    <p>Found game <%= game_uuid %></p>
+    <p id="search-out">Searching for game ...</p>
     <a href="/auth" onclick="logout();">Logout</a>
     <script src="/javascripts/logout.js"></script> 
+    <script src="/javascripts/game.js"></script> 
   </body>
 </html>
