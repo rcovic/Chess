@@ -6,18 +6,12 @@ const gamesList = require('../game/GamesList');
 
 class Queue {
     constructor() {
-        this.queue = new Map();
+        this.queue = [];
     }
 
     
     _addTicket(token) {
-        /*
-        scelgo l'username come chiave per la lista di attesa
-        perchè è univoco e un utente non può fare più code 
-        contemporaneamente
-        */
-        this.queue.set(
-            token.username, 
+        this.queue.push( 
             new Ticket(
                 token.username,
                 token.elo
@@ -25,26 +19,20 @@ class Queue {
         );
     }
 
-    _removeTicket(key) {
-        this.queue.delete(key);
+    _removeTicket(index) {
+        this.queue.splice(index, 1);
     }
 
     searchGame(token) {
-        var match = undefined;
-        /*
-        l'iterazione avviene per ordine di inserimento quindi
-        è ideale per la coda FIFO di attesa
-        */ 
-        for (let [username, ticket] of this.queue) {
-            if(ticket.canPlay(token)) {
-                match = username;
-                break;
-            }
-        }
         
-        if (match != undefined) {
-            gamesList.addGame(token.username, match)
-            this._removeTicket(match);
+        var index = this.queue.findIndex((el) => {
+            return el.canPlay(token);
+        });
+
+        if (index != undefined) {
+            let username = queue[index].username;
+            this._removeTicket(index);
+            gamesList.addGame(token.username, username)
         }
         else {
             this._addTicket(token);

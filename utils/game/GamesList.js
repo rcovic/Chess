@@ -21,6 +21,14 @@ class GamesList {
         );
 
         // ritorna la chiave?
+        // crea un instanza game nel db con foreign key ai giocatori?
+        // aggiunge la chiave al token?
+        // come notifico l'utente?
+        // l'utente chiede periodicamente se la partita è trovata?
+    }
+
+    deleteGame(uuid_key) {
+        this.games.delete(uuid_key);
     }
 }
 
