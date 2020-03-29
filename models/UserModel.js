@@ -1,7 +1,7 @@
 'use strict';
 
 const { DataTypes } = require('sequelize');
-const sequelize = require('../utils/db/connection');
+const sequelize = require('../controllers/utils/db/connection');
 
 
 module.exports = sequelize.define('users', {

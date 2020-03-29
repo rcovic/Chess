@@ -2,9 +2,11 @@
 
 const { v4:uuidv4 } = require('uuid');
 
-const tokenHandler = require('../../controllers/tokenHandler');
+const tokenHandler = require('../../tokenHandler');
 const Ticket = require('./Ticket');
 const gamesList = require('../game/GamesList');
+const dbop = require('../db/operations');
+
 
 
 class Queue {
@@ -51,12 +53,23 @@ class Queue {
     }
 
 
-    searchTicket(token, res) {
+    async _createGameInstance(res1, res2, game_uuid) {
+        await dbop.createGame(
+            game_uuid, 
+            res1.locals.token.username, 
+            res2.locals.token.username
+        );
+        // if return undefined should be handled
+    }
+
+
+    async searchTicket(token, res) {
         var opponent = this._existsOpponent(token);
 
         if (opponent != undefined) {
             let ticket = this.queue.get(opponent);
             this._removeTicket(opponent);
+            await this._createGameInstance(res, ticket.res, ticket.game_uuid);
             gamesList.addToGame(ticket.game_uuid, token);
             this._notifyGameReady(res, ticket.res, ticket.game_uuid);
         }
@@ -67,9 +80,8 @@ class Queue {
         }
     }
 
-    // to add : add game to user in db for consistency between logins
-    _notifyGameReady(res1, res2, game_uuid) {
-        
+    
+    _notifyGameReady(res1, res2, game_uuid) {        
         tokenHandler.setToken(res1, tokenHandler.addToToken(res1.locals.token, game_uuid));
         res1.send({ game_uuid: game_uuid });
 

@@ -27,13 +27,13 @@ module.exports.addToToken = (token, game_uuid) => {
     );
 };
 
-// to add : read db for game instance for consistency between logins
-module.exports.createToken = (user) => {
+
+module.exports.createToken = (user, games) => {
     return jwt.sign(
         {
             username: user.username,
             elo: user.elo,
-            games: []
+            games: games
         }, 
         secretKey,
         {

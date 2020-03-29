@@ -23,18 +23,16 @@ DROP TABLE IF EXISTS `games`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `games` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `duration` int(11) DEFAULT NULL,
-  `state` json DEFAULT NULL,
+  `game_uuid` char(36) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `whitePlayer` varchar(255) DEFAULT NULL,
-  `blackPlayer` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `whitePlayer` (`whitePlayer`),
-  KEY `blackPlayer` (`blackPlayer`),
-  CONSTRAINT `games_ibfk_1` FOREIGN KEY (`whitePlayer`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `games_ibfk_2` FOREIGN KEY (`blackPlayer`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE
+  `player_1` varchar(255) DEFAULT NULL,
+  `player_2` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`game_uuid`),
+  KEY `player_1` (`player_1`),
+  KEY `player_2` (`player_2`),
+  CONSTRAINT `games_ibfk_1` FOREIGN KEY (`player_1`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `games_ibfk_2` FOREIGN KEY (`player_2`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -58,6 +56,7 @@ CREATE TABLE `users` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+  `elo` int(11) DEFAULT '1000',
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`username`)
@@ -70,7 +69,6 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('ciao','ciao','ciao@ciao.ciao','2020-03-20 17:07:58','2020-03-20 17:07:58');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -83,4 +81,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-20 18:08:40
+-- Dump completed on 2020-03-29 20:25:59

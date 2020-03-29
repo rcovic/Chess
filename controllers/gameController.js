@@ -1,8 +1,8 @@
 'use strict';
 
 const tokenHandler = require('./tokenHandler');
-const queue = require('../utils/queue/Queue');
-const gamesList = require('../utils/game/GamesList');
+const queue = require('./utils/queue/Queue');
+const gamesList = require('./utils/game/GamesList');
 
 
 module.exports.index = function(req, res) {
@@ -20,7 +20,7 @@ module.exports.startSearch = async (req, res) => {
         return;
     }
 
-    queue.searchTicket(res.locals.token, res);
+    await queue.searchTicket(res.locals.token, res);
 };
 
 
