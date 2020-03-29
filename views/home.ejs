@@ -5,10 +5,10 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1>Home page</h1>
-    <p>Welcome <%= username %></p>
+    <h1>Welcome <%= token.username %></h1>
+    <h3>Your elo : <%= token.elo %></h3>
     <h2>Active games :</h2>
-    <% for (game_uuid of games) { %>
+    <% for (game_uuid of token.games) { %>
       <p>game <%= game_uuid %></p>
     <% } %>
     <a href="/game/matchmaking">Search a game</a><br>
