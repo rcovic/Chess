@@ -11,14 +11,35 @@ module.exports.decodeToken = (req, res, next) => {
 };
 
 
+module.exports.setToken = (res, token) => {
+    res.cookie('token', token);
+};
+
+
+module.exports.addToToken = (token, game_uuid) => {
+    token.games.push(game_uuid);
+    return jwt.sign(
+        token,
+        secretKey,
+        {
+            // expiresIn: '2h'
+        }
+    );
+};
+
+// to add : read db for game instance for consistency between logins
 module.exports.createToken = (user) => {
-    return jwt.sign({
-        username: user.username,
-        elo: user.elo
-    }, 
-    secretKey, {
-        // expiresIn: '2h'
-    }); 
+    return jwt.sign(
+        {
+            username: user.username,
+            elo: user.elo,
+            games: []
+        }, 
+        secretKey,
+        {
+            // expiresIn: '2h'
+        }
+    ); 
 };
 
 

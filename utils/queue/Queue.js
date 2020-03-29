@@ -2,6 +2,7 @@
 
 const { v4:uuidv4 } = require('uuid');
 
+const tokenHandler = require('../../controllers/tokenHandler');
 const Ticket = require('./Ticket');
 const gamesList = require('../game/GamesList');
 
@@ -66,9 +67,13 @@ class Queue {
         }
     }
 
-
+    // to add : add game to user in db for consistency between logins
     _notifyGameReady(res1, res2, game_uuid) {
+        
+        tokenHandler.setToken(res1, tokenHandler.addToToken(res1.locals.token, game_uuid));
         res1.send({ game_uuid: game_uuid });
+
+        tokenHandler.setToken(res2, tokenHandler.addToToken(res2.locals.token, game_uuid));
         res2.send({ game_uuid: game_uuid });
     }
 

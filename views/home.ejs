@@ -7,6 +7,10 @@
   <body>
     <h1>Home page</h1>
     <p>Welcome <%= username %></p>
+    <h2>Active games :</h2>
+    <% for (game_uuid of games) { %>
+      <p>game <%= game_uuid %></p>
+    <% } %>
     <a href="/game/matchmaking">Search a game</a><br>
     <a href="/auth" onclick="logout();">Logout</a>
     <script src="/javascripts/logout.js"></script> 

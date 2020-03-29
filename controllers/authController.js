@@ -17,7 +17,7 @@ module.exports.submitLogin = async (req, res) => {
 
         if (user) {
             let token = tokenHandler.createToken(user);
-            res.cookie('token', token);
+            tokenHandler.setToken(res, token);
             res.redirect('/game');
         }
         else {

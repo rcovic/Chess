@@ -6,7 +6,10 @@ const gamesList = require('../utils/game/GamesList');
 
 
 module.exports.index = function(req, res) {
-    res.render('home', { username: res.locals.token.username });
+    res.render('home', { 
+        username: res.locals.token.username,
+        games: res.locals.token.games
+    });
 };
 
 
