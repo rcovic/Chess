@@ -11,8 +11,9 @@ router.use(tokenHandler.decodeToken);
 
 router.get('/', gameController.index);
 
-router.get('/match', gameController.match);
-router.get('/match/search', gameController.searchGame);
+router.get('/matchmaking', gameController.matchmaking);
+router.get('/matchmaking/start', gameController.startSearch);
+router.get('/matchmaking/stop', gameController.stopSearch);
 
 
 module.exports = router;

@@ -4,36 +4,32 @@ const tokenHandler = require('./tokenHandler');
 const queue = require('../utils/queue/Queue');
 const gamesList = require('../utils/game/GamesList');
 
-function sleep(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-}
 
 module.exports.index = function(req, res) {
     res.render('home', { username: res.locals.token.username });
 };
 
 
-module.exports.searchGame = async (req, res) => {
-// 1 PROBLEM! must implement long polling on the client.
-// also the browser after a while will make the request again
-// if the ticket is not removed the palyer will be matched
-// with itself
+module.exports.startSearch = async (req, res) => {
 
-// 2 PROBLEM! if a user start a ticket request and leave the page?
-// you must remove the ticket
-// add to game route the removeticket middleware ?
-// THIS COULD SOLVE THE FIRST PROBLEM BUT IS NOT ELEGANT
-
-    var game_uuid = queue.searchTicket(res.locals.token);
-
-    while(!gamesList.isReady(game_uuid)) {
-        await sleep(1000);
+    if(queue.hasTicket(res.locals.token)) {
+        queue.setNewResponse(res.locals.token, res);
+        return;
     }
 
-    res.json({game_uuid: game_uuid});
+    queue.searchTicket(res.locals.token, res);
 };
 
 
-module.exports.match = (req, res) => {
-    res.render('search-game');
+module.exports.matchmaking = (req, res) => {
+    res.render('search_game');
 };
+
+
+// If the user leave the page without pressing the stop button
+// the ticket and the game will be left in queue
+// We can take this as an advantage. Background search for games?
+module.exports.stopSearch = (req, res) => {
+    queue.stopMatchmaking(res.locals.token);
+    res.redirect("/game");
+}

@@ -8,47 +8,73 @@ const gamesList = require('../game/GamesList');
 
 class Queue {
     constructor() {
-        this.queue = [];
+        // map instead of object beacause it remember insertion order
+        this.queue = new Map();
     }
 
-    _addTicket(token, game_uuid) {
-        this.queue.push( 
+
+    _addTicket(token, game_uuid, res) {
+        this.queue.set(
+            token.username, 
             new Ticket(
                 token.username,
                 token.elo,
-                game_uuid
+                game_uuid,
+                res
             )    
         );
     }
 
-    removeTicket(index) {
-        this.queue.splice(index, 1);
+
+    _removeTicket(username) {
+        this.queue.delete(username);
     }
 
-    hasTicket(username) {
-        return this.queue.findIndex((el) => {
-            return el.username == username;
-        });
+
+    stopMatchmaking(token) {
+        gamesList.deleteGame(this.queue.get(token.username).game_uuid);
+        this._removeTicket(token.username);
     }
 
-    searchTicket(token) {
-        
-        var index = this.queue.findIndex((el) => {
-            return el.canPlay(token);
-        });
+    hasTicket(token) {
+        return this.queue.get(token.username) != undefined;
+    }
 
-        if (index != undefined && index != -1) {
-            let game_uuid = this.queue[index].game_uuid;
-            this.removeTicket(index);
-            gamesList.addToGame(game_uuid, token);
-            return game_uuid;
+
+    _existsOpponent(token) {
+        for (let [username, ticket] of this.queue) {
+            if(ticket.canPlay(token))
+                return username;
+        }
+        return undefined;
+    }
+
+
+    searchTicket(token, res) {
+        var opponent = this._existsOpponent(token);
+
+        if (opponent != undefined) {
+            let ticket = this.queue.get(opponent);
+            this._removeTicket(opponent);
+            gamesList.addToGame(ticket.game_uuid, token);
+            this._notifyGameReady(res, ticket.res, ticket.game_uuid);
         }
         else {
             let game_uuid = uuidv4();
-            this._addTicket(token, game_uuid);
+            this._addTicket(token, game_uuid, res);
             gamesList.createGame(game_uuid, token);
-            return game_uuid;
         }
+    }
+
+
+    _notifyGameReady(res1, res2, game_uuid) {
+        res1.send({ game_uuid: game_uuid });
+        res2.send({ game_uuid: game_uuid });
+    }
+
+    
+    setNewResponse(token, res) {
+        this.queue.get(token.username).res = res;
     }
 }
 

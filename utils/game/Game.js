@@ -21,10 +21,6 @@ class Game {
         else
             this.black = username;
     }
-
-    isReady() {
-        return this.white != undefined && this.black != undefined;
-    }
 }
 
 module.exports = Game;

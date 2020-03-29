@@ -6,6 +6,7 @@ class GamesList {
     constructor() {
         this.games = new Map();
     }
+    
 
     createGame(game_uuid, token) {
         this.games.set(
@@ -17,16 +18,14 @@ class GamesList {
         );
     }
 
+
     deleteGame(game_uuid) {
         this.games.delete(game_uuid);
     }
 
+
     addToGame(game_uuid, token) {
         this.games.get(game_uuid).addPlayer(token.username);
-    }
-
-    isReady(game_uuid) {
-        return this.games.get(game_uuid).isReady();
     }
 }
 
