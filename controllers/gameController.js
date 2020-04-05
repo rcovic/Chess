@@ -35,3 +35,24 @@ module.exports.stopSearch = (req, res) => {
     queue.stopMatchmaking(res.locals.token);
     res.redirect("/game");
 }
+
+
+module.exports.isMyGameMiddleware = (req, res, next) => {
+
+    var game = gamesList.getGame(req.params.game_uuid);
+    if (game == undefined || !game.hasPlayer(res.locals.token.username)) {
+        res.status(400);
+        res.send('How do you get here? :)');
+    }
+    else {
+        res.locals.game = game;
+        next();
+    }
+};
+
+
+module.exports.playGame = (req, res) => {
+    res.render('play_game', {
+        game: res.locals.game
+    })
+};

@@ -27,6 +27,10 @@ class GamesList {
     addToGame(game_uuid, token) {
         this.games.get(game_uuid).addPlayer(token.username);
     }
+
+    getGame(game_uuid) {
+        return this.games.get(game_uuid);
+    }
 }
 
 var gamesList = new GamesList();

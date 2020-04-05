@@ -21,6 +21,10 @@ class Game {
         else
             this.black = username;
     }
+
+    hasPlayer(username) {
+        return (username == this.white)  || (username == this.black);
+    }
 }
 
 module.exports = Game;
