@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
+-- MySQL dump 10.17  Distrib 10.3.22-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: chess_db
 -- ------------------------------------------------------
--- Server version	5.7.29-0ubuntu0.18.04.1
+-- Server version	10.3.22-MariaDB-0+deb10u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -23,19 +23,17 @@ DROP TABLE IF EXISTS `games`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `games` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `duration` int(11) DEFAULT NULL,
-  `state` json DEFAULT NULL,
+  `game_uuid` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `whitePlayer` varchar(255) DEFAULT NULL,
-  `blackPlayer` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `whitePlayer` (`whitePlayer`),
-  KEY `blackPlayer` (`blackPlayer`),
-  CONSTRAINT `games_ibfk_1` FOREIGN KEY (`whitePlayer`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `games_ibfk_2` FOREIGN KEY (`blackPlayer`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `player_1` varchar(255) DEFAULT NULL,
+  `player_2` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`game_uuid`),
+  KEY `player_1` (`player_1`),
+  KEY `player_2` (`player_2`),
+  CONSTRAINT `games_ibfk_1` FOREIGN KEY (`player_1`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `games_ibfk_2` FOREIGN KEY (`player_2`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,6 +42,7 @@ CREATE TABLE `games` (
 
 LOCK TABLES `games` WRITE;
 /*!40000 ALTER TABLE `games` DISABLE KEYS */;
+INSERT INTO `games` VALUES ('7baeaf48-a3f4-426b-b866-7f4b60f8a8f9','2020-04-08 02:44:27','2020-04-08 02:44:27','ro','da'),('c153454a-a4fb-4987-8270-9ca4b76939f7','2020-04-08 02:44:15','2020-04-08 02:44:15','da','ro'),('f14ba082-a21b-4e75-a485-e3348cd3a4d5','2020-04-08 02:44:36','2020-04-08 02:44:36','da','ro');
 /*!40000 ALTER TABLE `games` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,10 +57,11 @@ CREATE TABLE `users` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+  `elo` int(11) DEFAULT 1000,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('ciao','ciao','ciao@ciao.ciao','2020-03-20 17:07:58','2020-03-20 17:07:58');
+INSERT INTO `users` VALUES ('da','da','da@gmail.com',1000,'2020-04-08 02:43:36','2020-04-08 02:43:36'),('ro','ro','davi@yahoo.it',1000,'2020-04-08 02:43:55','2020-04-08 02:43:55');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -83,4 +83,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-20 18:08:40
+-- Dump completed on 2020-04-08  4:48:14

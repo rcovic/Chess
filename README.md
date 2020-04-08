@@ -12,6 +12,10 @@ To run this web applcation with success you have to create a mysql database inst
 }
 ```
 
+**_Note for Debian 10 you should use mariadb_**
+Just uncomment the connection dialect in db/connection.js
+
+
 ## Setup
 
 First on all install every module :
