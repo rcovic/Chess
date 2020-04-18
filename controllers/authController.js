@@ -4,8 +4,19 @@ const tokenHandler = require('./tokenHandler');
 const dbop = require('./utils/db/operations');
 
 
-module.exports.auth = (req, res) => {
-    res.render('auth');
+module.exports.checkUser = async (req, res) => {
+    let exists = await dbop.existUser(req.params.username);
+
+    if (exists) {
+        res.status(200).json({
+            message: 'Username found'
+        });
+    }
+    else {
+        res.status(404).json({
+            message: 'Username not found'
+        });
+    }
 };
 
 
@@ -14,28 +25,24 @@ module.exports.submitLogin = async (req, res) => {
     
     const user = await dbop.getUser(username, password);
 
-    if (user == -1) {
-        res.render('auth', {
-            error: 'Error while authentication'
-        });
+    switch (user) {
+        case undefined:
+            res.status(500).json({
+                message: 'Server side error'
+            });
+            break;
+        case null:
+            res.status(401).json({
+                message: 'Wrong username or password'
+            });
+            break;
+        default:
+            let token = tokenHandler.createToken(username);
+            res.status(200).json({
+                message: 'Login Successfull',
+                token: token
+            });
     }
-    else if (user == undefined) {
-        res.render('auth', {
-            error: 'Wrong username or password'
-        });
-    } 
-    else {
-        const games = [...dbop.modelsGen(await dbop.getGames(user))];
-        let token = tokenHandler.createToken(user, games);
-        tokenHandler.setToken(res, token);
-        res.redirect('/game');
-    }
-};
-
-
-
-module.exports.register = (req, res) => {
-    res.render('register');
 };
 
 
@@ -45,8 +52,8 @@ module.exports.submitRegistration = async (req, res) => {
     let exists = await dbop.existUser(username);
 
     if (exists) {
-        res.render('register', {
-            error: 'Username already taken'
+        res.status(409).json({
+            message: 'Username already exists'
         });
         return;
     }
@@ -54,13 +61,15 @@ module.exports.submitRegistration = async (req, res) => {
     let created = await dbop.createUser(username, password, email);
 
     if (created == undefined) {
-        res.render('register', {
-            error: 'Registration failed'
+        res.status(500).json({
+            message: 'Registration failed, retry later'
         })
     }
     else {
-        res.render('register', {
-            success: true
+        let token = tokenHandler.createToken(username);
+        res.status(201).json({
+            message: 'Registration Successfull',
+            token: token
         });
     }
 };

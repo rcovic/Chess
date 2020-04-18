@@ -5,12 +5,9 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const tokenHandler = require('../controllers/tokenHandler');
 
-router.use(tokenHandler.hasToken);
+router.get('/users/:username', authController.checkUser)
 
-router.get('/', authController.auth);
-router.post('/', authController.submitLogin);
-
-router.get('/register', authController.register);
+router.post('/login', authController.submitLogin);
 router.post('/register', authController.submitRegistration);
 
 module.exports = router;

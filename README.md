@@ -1,8 +1,13 @@
 # Chess
 
-**This is a chess web app game built on express js framework_**
+**This is a chess web app game built on react and express js framework_**
 
-To run this web applcation with success you have to create a mysql database instance.
+## **[To do : convert game route to restful api]**
+
+
+## Setup
+
+To run this web applcation with success you have to create a mysql/mariadb database instance.
 ```javascript
 {
     host: 'localhost',
@@ -12,13 +17,10 @@ To run this web applcation with success you have to create a mysql database inst
 }
 ```
 
-**_Note for Debian 10 you should use mariadb_**
+**_Note for Debian 10 you should use mariadb_**  
 Just uncomment the connection dialect in db/connection.js
 
-
-## Setup
-
-First on all install every module :
+Then install every module :
 ```shell
 $ cd Chess
 $ npm install
@@ -45,7 +47,7 @@ $ mysql -u chess -p chess_db < database/dump.sql
 
 If you want to modify a model then you should apply changes to db :
 ```shell
-$ node models/migrations.js
+$ node controllers/utils/db/make_migrations.js
 ```
 
 ## Start
@@ -55,7 +57,29 @@ To run the server in debug mode:
 $ DEBUG=chess:* npm start
 ```
 
+To run with nodemon
+```
+$ npm run nodemon
+```
+
 To run in production mode :
 ```shell
 $ NODE_ENV=production npm start
 ```
+
+### to run with react in development 
+```shell
+npm run nodemon
+cd chess-react 
+npm start
+```
+Prompt will ask to use another port (choose Y)
+
+## Api specification
+
+In root folder you will find openapi.yaml specification file.  
+Just upload it in [swagger editor](https://editor.swagger.io/)
+
+## Resources
+
+Some glyphs come from [https://www.toptal.com/designers/htmlarrows/symbols/](https://www.toptal.com/designers/htmlarrows/symbols/)

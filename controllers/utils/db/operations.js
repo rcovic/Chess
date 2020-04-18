@@ -10,6 +10,18 @@ module.exports.modelsGen = function* (games) {
     }
 }
 
+module.exports.getUserInfo = async (username) => {
+    const result = await UserModel.findOne({
+        attributes: ['username', 'elo'],
+        where : {
+            username: username
+        }
+    })
+    .catch(() => undefined );
+
+    return result;
+}
+
 
 module.exports.getUser = async (user, pass) => {
     const result = await UserModel.findOne({
@@ -18,18 +30,29 @@ module.exports.getUser = async (user, pass) => {
             password: pass
         }
     })
-    .catch(() => { return -1;} );
+    .catch(() => undefined );
 
     return result;
 }
 
-module.exports.getGames = async (user) => {
-    let p1Games = await user.getGamesAsPlayer1().catch(() => {
-            return undefined; 
+module.exports.getGames = async (username) => {
+    const user = await UserModel.findByPk(username)
+    .then((res) => {
+        if (res === undefined)
+            throw new Error();
+        return res;
+    })
+    .catch((err) => {
+        throw err;
     });
-    let p2Games = await user.getGamesAsPlayer2().catch(() => {
-            return undefined; 
-    });
+
+    let p1Games = await user.getGamesAsPlayer1()
+    .then((res) => res == undefined? [] : res)
+    .catch(() => []);
+    
+    let p2Games = await user.getGamesAsPlayer2()
+    .then((res) => res == undefined? [] : res)
+    .catch(() => []);
     
     return p1Games.concat(p2Games);
 };
@@ -37,9 +60,7 @@ module.exports.getGames = async (user) => {
 
 module.exports.existUser = async (username) => {
     const result = await UserModel.findByPk(username)
-    .catch(() => {
-        return undefined;
-    });
+    .catch(() => undefined);
 
     return result != undefined;
 }

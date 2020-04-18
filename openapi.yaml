@@ -1,0 +1,232 @@
+openapi: 3.0.0
+info:
+  title: chess.unimore API
+  version: 0.0.0
+  
+paths:
+
+  /auth/users/{username}:
+    get:
+      tags:
+        - Authentication
+      summary: Check if username exists
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: User exists
+        '404':
+          description: User not found
+        
+  /auth/login:
+    post:
+      tags:
+          - Authentication
+      summary: Get authorization token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        '200':
+          description: Login success with token in response body
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Token"
+        '401':
+          description: Wrong credentials
+  
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Registration"
+      responses:
+        '201':
+          description: New user created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+        '409':
+          description: Username already existing
+
+
+  /game/users/{username}:
+    get:
+      tags:
+        - Game Api
+      summary: Retrieve username info
+      security: 
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: Infos successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        '401' :
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: User not found
+          
+  /game/games:
+    get:
+      tags:
+        - Game Api
+      summary: Get user games list
+      description: Fetch the game uuid list based on token identity
+      security: 
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List retrieved with success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GamesList'
+  
+  /game/matchmaking/start:
+    get:
+      tags:
+        - Game Api
+      summary: Search a Game
+      description: Place user in matchmaking queue, response could take time 
+      security: 
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Player found and game created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameFound'
+        '404':
+          description: You have been remove by search queue
+        '409':
+          description: Your request has been replaced by a new one
+
+  /game/matchmaking/stop:
+    get:
+      tags:
+        - Game Api
+      summary: Stop game search
+      description: Remove from game search based on token identity
+      security: 
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User removed from search list
+          
+  /game/info/{game_uuid}:
+    get:
+      tags:
+        - Game Api
+      summary: Fetch games info
+      description: Fetch game info from game session. This response could be extended during development (adding game status)
+      security: 
+        - bearerAuth: []
+      parameters:
+      - in: path
+        name: game_uuid
+        required: true
+        schema: 
+          type: string
+      responses:
+        '200':
+          description: Game found and infos fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameInfo'
+        '403':
+          description: You do not have rights for the resource or the resource could not exists anymore.
+
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        username: 
+          type: string
+        password:
+          type: string
+    Registration:
+      type: object
+      properties:
+        username: 
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+    Message:
+      type: object
+      properties:
+        message: 
+          type: string
+    Token:
+      type: object
+      properties:
+        message: 
+          type: string
+        token: 
+          type: string
+    UserInfo:
+      type: object
+      properties:
+        username:
+          type: string
+        elo:
+          type: integer
+    GamesList:
+      type: object
+      properties:
+        games:
+          type: array
+          items: 
+            type: string
+    GameFound:
+      type: object
+      properties:
+        game_uuid:
+          type: string
+    GameInfo:
+      type: object
+      properties:
+        game_uuid:
+          type: string
+        white:
+          type: string
+        black:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid 
