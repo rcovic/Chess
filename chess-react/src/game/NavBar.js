@@ -4,6 +4,7 @@ import {AuthContext} from '../App';
 import {TOKEN_KEY} from '../storageKeys';
 import {axiosAuthWrapper as axiosAW} from './util/axiosAuthWrapper';
 import parseJwt from './util/parseJwt';
+import logout from './util/logout';
 
 
 export default function NavBar() {
@@ -15,9 +16,15 @@ export default function NavBar() {
 
     useEffect(() => {
         let mounted = true;
+        try {
+            var decodedToken = parseJwt(token);
+        } catch (err) {
+            logout(authContext, TOKEN_KEY);
+            return;
+        }
         axiosAW({
             method: 'get',
-            url: '/game/user/'+parseJwt(token).username,
+            url: '/game/user/' + decodedToken.username,
         }, authContext)
         .then((res) => mounted ? setUserInfo(res.data) : null)
         .catch((err) => console.log(err));
@@ -25,16 +32,12 @@ export default function NavBar() {
         return () => mounted = false;
     }, [token, authContext]);
 
-    function logout() {
-        localStorage.removeItem(TOKEN_KEY);
-        authContext.setAuth(false);
-    }
 
     return (
         <div className="container d-flex flex-wrap mt-2">
                 <h2 className="mr-2"><span className="badge badge-warning text-wrap">{userInfo.username}</span></h2>
                 <h2><span className="badge badge-info text-wrap">{userInfo.elo}</span></h2>
-                <button className="btn btn-danger ml-auto" onClick={logout}>
+                <button className="btn btn-danger ml-auto" onClick={() => logout(authContext, TOKEN_KEY)}>
                     Logout
                     <svg className="bi bi-box-arrow-right ml-2" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M11.646 11.354a.5.5 0 010-.708L14.293 8l-2.647-2.646a.5.5 0 01.708-.708l3 3a.5.5 0 010 .708l-3 3a.5.5 0 01-.708 0z" clipRule="evenodd"/>

@@ -1,5 +1,6 @@
 'use strict';
 
+const crypto = require('crypto');
 const UserModel = require('../../../models/UserModel');
 const GameModel = require('../../../models/GameModel');
 
@@ -27,7 +28,7 @@ module.exports.getUser = async (user, pass) => {
     const result = await UserModel.findOne({
         where : {
             username: user,
-            password: pass
+            password: crypto.createHash('sha256').update(pass).digest('hex')
         }
     })
     .catch(() => undefined );
@@ -69,7 +70,7 @@ module.exports.existUser = async (username) => {
 module.exports.createUser = async (user, pass, email) => {
     return await UserModel.create({
         username: user,
-        password: pass,
+        password: crypto.createHash('sha256').update(pass).digest('hex'),
         email: email
     }).catch(() => {
         return undefined;
