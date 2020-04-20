@@ -38,7 +38,7 @@ export default function Form() {
 
     return (
         <div className="row justify-content-center">
-            <div className="card  col-5 bg-light" >
+            <div className="card  col col-md-8 col-lg-5 bg-light mx-3" >
                 <div className="card-body" >
                     <h4 className="card-title">{form === 'login' ? 'Sign In' : 'Sign Up'}</h4>
                     <form onSubmit={form === 'login' ? login : register}>
