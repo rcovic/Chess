@@ -2,9 +2,6 @@
 
 **This is a chess web app game built on react and express js framework_**
 
-## **[To do : convert game route to restful api]**
-
-
 ## Setup
 
 To run this web applcation with success you have to create a mysql/mariadb database instance.
