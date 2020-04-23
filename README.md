@@ -81,5 +81,7 @@ In root folder you will find openapi.yaml specification file.
 Just upload it in [swagger editor](https://editor.swagger.io/)
 
 ## Resources
-
-Some glyphs come from [https://www.toptal.com/designers/htmlarrows/symbols/](https://www.toptal.com/designers/htmlarrows/symbols/)
+- Node.js
+- Express.js
+- React.js
+- Bootstrap
