@@ -1,5 +1,5 @@
 'use strict';
-
+const io = require('../webSocket');
 // un game è identificato da un uuid
 
 class Game {

@@ -4,6 +4,7 @@ const tokenHandler = require('./tokenHandler');
 const queue = require('./utils/queue/Queue');
 const gamesList = require('./utils/game/GamesList');
 const dbop = require('./utils/db/operations');
+const webSocket = require('./webSocket');
 
 
 module.exports.getUserInfo = async (req, res) => {
