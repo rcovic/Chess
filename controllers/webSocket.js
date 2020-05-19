@@ -1,4 +1,4 @@
-const www = require('./www');
+const www = require('../bin/www');
 const io = require('socket.io')(www.server);
 
 exports.io = io;

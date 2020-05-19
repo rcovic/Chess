@@ -38,6 +38,17 @@ module.exports.verifyToken = (req, res, next) => {
 };
 
 
+module.exports.isValidToken = (token) => {
+    try {
+        jwt.verify(token, secretKey);
+        return true;
+    }
+    catch (err) {
+        return false;
+    }
+};
+
+
 module.exports.decodeToken = (req, res, next) => {
     res.locals.token = jwt.decode(res.locals.tokenString);
     next();
